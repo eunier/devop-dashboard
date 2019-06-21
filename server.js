@@ -2,12 +2,11 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const appStatus = require('./app-status');
 
 app.get('/', (_, res) => {
   res.send('<h1>test</>');
 });
-
-let testCnt = 0;
 
 io.on('connection', socket => {
   console.log('socket io connected');
@@ -16,7 +15,7 @@ io.on('connection', socket => {
     console.log(`socket is subscribing with interval, ${interval}`);
 
     setInterval(() => {
-      socket.emit('timer', ++testCnt);
+      socket.emit('timer', appStatus.generateAppStatusDataTest());
     }, interval);
   });
 });
