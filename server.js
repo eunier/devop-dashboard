@@ -9,11 +9,11 @@ app.get('/', (_, res) => {
 
 let testCnt = 0;
 
-io.on('connectino', socket => {
+io.on('connection', socket => {
   console.log('socket io connected');
 
-  socket.on('subscribeToTimer', interval => {
-    console.log(`client is subscribing to timer with interval, ${interval}`);
+  socket.on('subscribe', interval => {
+    console.log(`socket is subscribing with interval, ${interval}`);
 
     setInterval(() => {
       socket.emit('timer', ++testCnt);
@@ -21,7 +21,7 @@ io.on('connectino', socket => {
   });
 });
 
-const port = 4000;
+const port = 8000;
 http.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
