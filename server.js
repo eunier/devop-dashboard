@@ -15,7 +15,7 @@ io.on('connection', socket => {
     console.log(`socket is subscribing with interval, ${interval}`);
 
     setInterval(() => {
-      socket.emit('timer', appStatus.generateAppStatusDataTest());
+      socket.emit('timer', appStatus.generateAppStatusData());
     }, interval);
   });
 });
