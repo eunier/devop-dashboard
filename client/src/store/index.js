@@ -2,15 +2,15 @@ import { createStore } from 'redux';
 import type from './type';
 
 const initialState = {
-  appsStatus: []
+  appsStatusOverall: []
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case type.UPDATE_APPS_STATUS:
+    case type.UPDATE_APPS_STATUS_OVERALL:
       return {
         ...state,
-        appsStatus: action.payload
+        appsStatusOverall: action.payload
       };
     default:
       return state;

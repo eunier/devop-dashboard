@@ -9,7 +9,7 @@ const generateAppStatusData = () => {
 
   for (let i = 0; i < appsStatus.length; i++) {
     const statusNum = Math.floor(Math.random() * 3) + 1;
-    const name = `app${i + 1}`;
+    const name = `App${i + 1}`;
 
     appsStatus[i] = { name: name, status: status[statusNum] };
   }
