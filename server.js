@@ -11,13 +11,9 @@ app.get('/', (_, res) => {
 io.on('connection', socket => {
   console.log('socket io connected');
 
-  socket.on('subscribe', interval => {
-    console.log(`socket is subscribing with interval, ${interval}`);
-
-    setInterval(() => {
-      socket.emit('timer', appStatus.generateAppStatusData());
-    }, interval);
-  });
+  setInterval(() => {
+    socket.emit('data', appStatus.generateAppStatusData());
+  }, 1000);
 });
 
 const port = 8000;

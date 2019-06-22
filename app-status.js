@@ -1,9 +1,3 @@
-let testCnt = 0;
-
-const generateAppStatusDataTest = () => {
-  return testCnt++;
-};
-
 const generateAppStatusData = () => {
   const status = {
     1: 'Critical',
@@ -20,10 +14,9 @@ const generateAppStatusData = () => {
     appsStatus[i] = { name: name, status: status[statusNum] };
   }
 
-  return JSON.stringify(appsStatus);
+  return appsStatus;
 };
 
 module.exports = {
   generateAppStatusData: generateAppStatusData,
-  generateAppStatusDataTest: generateAppStatusDataTest
 };
