@@ -10,7 +10,13 @@ class AppDetail extends Component {
     return (
       <div>
         <p>{this.props.appDetailsIndex}</p>
-        <Line></Line>
+        <p>
+          {this.props.history.forEach((elem, i) => (
+            console.log('a', elem)
+          ))}
+        </p>
+        {/* <p>{JSON.stringify(this.props.history)}</p> */}
+        {/* <Line /> */}
         <Link to="/">
           <Button
             variant="primary"
@@ -26,7 +32,8 @@ class AppDetail extends Component {
 
 const mapStateToProps = state => {
   return {
-    appDetailsIndex: state.appDetailsIndex
+    appDetailsIndex: state.appDetailsIndex,
+    history: state.appsStatusHistory
   };
 };
 

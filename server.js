@@ -8,7 +8,7 @@ app.get('/', (_, res) => {
   res.send('<h1>test</>');
 });
 
-let emitCnt = 0;
+// let emitCnt = 0;
 
 // io.on('connection', socket => {
 //   console.log('socket connected');
@@ -25,6 +25,10 @@ let emitCnt = 0;
 // });
 
 let socketCnt = 0;
+let history = [];
+let initialized = false;
+let emiting = false;
+const maxHistorySeconds = 2 * 60 * 60;
 
 io.on('connect', socket => {
   console.log(`socket connected, total ${++socketCnt}`);
@@ -35,15 +39,47 @@ io.on('connect', socket => {
 });
 
 setInterval(() => {
-  if (socketCnt > 0) {
-    io.emit('apps_status', appStatus.generateAppStatusData());
-    const date = new Date();
-    console.log(
-      `[${date.toLocaleDateString()} ${
-        date.toLocaleTimeString()
-      }] - emiting, socket count: ${socketCnt}`
-    );
+  if (initialized === false) {
+    while (history.length < maxHistorySeconds - 1) {
+      history.push(
+        appStatus.generateAppStatusData(maxHistorySeconds, history.length)
+          .detail
+      );
+      if (history.length === 7199) {
+        debugger;
+        console.log('slkfs');
+      }
+    }
+
+    initialized = true;
   }
+
+  current = appStatus.generateAppStatusData();
+  history.push(current);
+
+  if (history.length > maxHistorySeconds) {
+    history.splice(0, 1);
+  }
+
+  if (socketCnt > 0) {
+    emiting = true;
+
+    io.emit('apps_status', {
+      current: current,
+      history: history
+    });
+  } else {
+    emiting = false;
+  }
+
+  const date = new Date();
+  console.log(
+    `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}] - ${
+      emiting ? 'emiting, ' : ''
+    }socket count: ${socketCnt}`
+  );
+
+  console.log(history.length);
 }, 1000);
 
 const port = 8000;

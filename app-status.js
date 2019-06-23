@@ -1,5 +1,17 @@
-const generateAppStatusData = () => {
-  const maxApps = 12;
+const generateAppStatusData = (maxHistorySeconds, index) => {
+  let date = new Date();
+
+  if (
+    typeof maxHistorySeconds !== 'undefined' &&
+    typeof index !== 'undefined'
+  ) {
+    const MS_PER_SECOND = 1000;
+    const durationInSecond = maxHistorySeconds - index;
+    date = new Date(date - durationInSecond * MS_PER_SECOND);
+    const datePretty = `${date.getFullYear()} ${date.getMonth()} ${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  }
+
+  const appCnt = 2;
   const status = {
     1: {
       str: 'Critical',
@@ -25,7 +37,7 @@ const generateAppStatusData = () => {
   let appsStatusOverall = [];
   let appsStatusDetail = [];
 
-  for (let i = 0; i < maxApps; i++) {
+  for (let i = 0; i < appCnt; i++) {
     const statusNum = randomStatusNum(1, 3);
     const statusPer = randomStatusNum(
       status[statusNum].minPer,
@@ -34,7 +46,7 @@ const generateAppStatusData = () => {
     const name = `App${i + 1}`;
 
     appsStatusOverall.push({ name: name, status: status[statusNum].str });
-    appsStatusDetail.push({ percentage: statusPer, date: new Date() });
+    appsStatusDetail.push({ percentage: statusPer, date: date });
   }
 
   return { overall: appsStatusOverall, detail: appsStatusDetail };

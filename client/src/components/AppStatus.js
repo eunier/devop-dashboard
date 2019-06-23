@@ -9,8 +9,10 @@ let socket = openSocket('http://localhost:8000');
 class AppStatusOverall extends React.Component {
   componentDidMount() {
     socket.on('apps_status', data => {
-      this.props.updateAppsStatusOverall(data);
-      this.props.updateAppsStatusHistory(data);
+      console.log('data', data);
+      this.props.updateAppsStatusOverall(data.current.overall);
+      this.props.updateAppsStatusDetail(data.current.detail);
+      this.props.updateAppsStatusHistory(data.history);
     });
   }
 
@@ -36,6 +38,9 @@ const mapDistachToProps = dispatch => {
   return {
     updateAppsStatusOverall: payload => {
       dispatch({ type: type.UPDATE_APPS_STATUS_OVERALL, payload });
+    },
+    updateAppsStatusDetail: payload => {
+      dispatch({ type: type.UPDATE_APPS_STATUS_DETAIL, payload });
     },
     updateAppsStatusHistory: payload => {
       dispatch({ type: type.ADD_APP_DETAILS_HISTORY, payload });
