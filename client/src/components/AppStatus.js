@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppCard from './AppCard';
 import type from '../store/type';
+import { Spinner } from 'react-bootstrap';
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:8000');
 
@@ -20,14 +21,11 @@ class AppStatusOverall extends React.Component {
     return (
       <div>
         <h1>Overal Application Status</h1>
-        <p>
-          {this.props.appsStatusOverall.length !== 0
-            ? JSON.stringify(this.props.appsStatusOverall)
-            : null}
-        </p>
-        <dir>
+        {this.props.appsStatusOverall.length === 0 ? (
+          <Spinner animation="grow" variant="secondary" />
+        ) : (
           <AppCard />
-        </dir>
+        )}
       </div>
     );
   }

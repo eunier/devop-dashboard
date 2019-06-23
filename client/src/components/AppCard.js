@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { CardColumns, Card } from 'react-bootstrap';
+import AppDetails from './AppDetail';
 
 class AppCard extends React.Component {
   render() {
@@ -14,6 +15,9 @@ class AppCard extends React.Component {
                 bg={getColor(app.status)}
                 text="white"
                 className="text-left p-3"
+                onClick={() => {
+                  console.log(`click ${key}`);
+                }}
               >
                 <Card.Title>{app.name}</Card.Title>
                 <Card.Text>{app.status}</Card.Text>
