@@ -8,6 +8,7 @@ import AppDetail from './components/AppDetail';
 import Error from './components/Error';
 import store from './store';
 
+
 class App extends Component {
   render() {
     return (
