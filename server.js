@@ -30,7 +30,8 @@ let clientsFirstOnData = [];
 let history = [];
 let initialized = false;
 let emiting = false;
-const maxHistorySeconds = 2 * 60 * 60;
+// const maxHistorySeconds = 2 * 60 * 60;
+const maxHistorySeconds = 4;
 
 io.on('connect', socket => {
   clients.push(socket);
@@ -46,6 +47,11 @@ io.on('connect', socket => {
     });
 
     socket.emit('res_full_history', { appHistory: resHistory });
+  });
+
+  socket.on('req_last_history_elem', data => {
+    appFocusIndex = data.appIndex;
+    console.log(appFocusIndex);
   });
 
   socket.on('disconnect', () => {
@@ -81,7 +87,7 @@ setInterval(() => {
       current: current
     });
 
-    io.emit('apps_status_history', {
+    io.emit('res_last_history_elem', {
       latestHistory: history[history.length - 1]
     });
   } else {

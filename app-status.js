@@ -10,7 +10,7 @@ const generateAppStatusData = (maxHistorySeconds, index) => {
     date = new Date(date - durationInSecond * MS_PER_SECOND);
   }
 
-  const appCnt = 3;
+  const appCnt = 2;
   const status = {
     1: {
       str: 'Critical',
@@ -45,7 +45,7 @@ const generateAppStatusData = (maxHistorySeconds, index) => {
     const name = `App${i + 1}`;
 
     appsStatusOverall.push({ name: name, status: status[statusNum].str });
-    appsStatusDetail.push({ percentage: statusPer, date: date });
+    appsStatusDetail.push({ name: name, percentage: statusPer, date: date });
   }
 
   return { overall: appsStatusOverall, detail: appsStatusDetail };

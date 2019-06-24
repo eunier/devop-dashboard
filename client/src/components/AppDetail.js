@@ -17,11 +17,13 @@ class AppDetail extends Component {
     });
 
     socket.on('res_full_history', data => {
+      console.log('res_full_history', { data });
       this.props.updateFullHistory(data.appHistory);
     });
 
-    socket.on('apps_status_history', data => {
-      this.props.updateHistory(data.latestHistory);
+    socket.on('res_last_history_elem', data => {
+      console.log('res_last_history_elem', { data });
+      this.props.updateHistory(data.latestHistory[this.props.appDetailsIndex]);
     });
   }
 

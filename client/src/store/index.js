@@ -32,9 +32,10 @@ const reducer = (state = initialState, action) => {
         appsStatusHistory: action.payload
       };
     case type.UPDATE_HISTORY:
-      let newHistory;
-      // Todo: continue here
-      return { ...state, newHistory };
+      const newHistory = JSON.parse(JSON.stringify(state.appsStatusHistory));
+      newHistory.splice(0, 1);
+      newHistory.push(action.payload);
+      return { ...state, appsStatusHistory: newHistory };
     case type.SET_APP_DETAILS_INDEX:
       return { ...state, appDetailsIndex: action.payload };
     default:

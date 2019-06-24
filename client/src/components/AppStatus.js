@@ -44,15 +44,9 @@ const mapDistachToProps = dispatch => {
     updateAppsStatusOverall: payload => {
       dispatch({ type: type.UPDATE_APPS_STATUS_OVERALL, payload });
     },
-    // updateAppsStatusDetail: payload => {
-    //   dispatch({ type: type.UPDATE_APPS_STATUS_DETAIL, payload });
-    // },
     setSocket: payload => {
       dispatch({ type: type.SET_SOCKET, payload });
     }
-    // updateAppsStatusHistory: payload => {
-    //   dispatch({ type: type.ADD_APP_DETAILS_HISTORY, payload });
-    // }
   };
 };
 
