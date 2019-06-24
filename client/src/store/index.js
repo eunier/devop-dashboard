@@ -5,12 +5,17 @@ const initialState = {
   appDetailsIndex: null,
   appsStatusOverall: [],
   appsStatusDetail: [],
-  appsStatusHistory: []
+  appsStatusHistory: [],
+  socket: null
 };
 
 const reducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
+    case type.SET_SOCKET:
+      return {
+        ...state,
+        socket: action.payload
+      };
     case type.UPDATE_APPS_STATUS_OVERALL:
       return {
         ...state,
@@ -21,20 +26,28 @@ const reducer = (state = initialState, action) => {
         ...state,
         appsStatusDetail: action.payload
       };
-    case type.ADD_APP_DETAILS_HISTORY:
+    case type.UPDATE_FULL_HISTORY:
       return {
         ...state,
         appsStatusHistory: action.payload
       };
+    // case type.ADD_APP_DETAILS_HISTORY:
+    //   const socket = action.payload;
+
+    //   if (state.appsStatusHistory.length === 0) {
+    //     socket.on('apps_status_history', data => {
+    //       console.log('apps_status_history', data);
+    //     });
+    //   }
+
+    //   return {
+    //     ...state,
+    //     appsStatusHistory: action.payload
+    //   };
     case type.SET_APP_DETAILS_INDEX:
       return {
         ...state,
         appDetailsIndex: action.payload
-      };
-    case type.RESET_APP_DETAILS_INDEX:
-      return {
-        ...state,
-        appDetailsIndex: null
       };
     default:
       return state;

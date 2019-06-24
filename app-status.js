@@ -8,10 +8,9 @@ const generateAppStatusData = (maxHistorySeconds, index) => {
     const MS_PER_SECOND = 1000;
     const durationInSecond = maxHistorySeconds - index;
     date = new Date(date - durationInSecond * MS_PER_SECOND);
-    const datePretty = `${date.getFullYear()} ${date.getMonth()} ${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
   }
 
-  const appCnt = 2;
+  const appCnt = 3;
   const status = {
     1: {
       str: 'Critical',

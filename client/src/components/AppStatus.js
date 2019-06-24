@@ -7,13 +7,23 @@ import openSocket from 'socket.io-client';
 let socket = openSocket('http://localhost:8000');
 
 class AppStatusOverall extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
+    if (!socket.connected) {
+      socket.off();
+      socket.open();
+    }
+
+    this.props.setSocket(socket);
+
     socket.on('apps_status', data => {
-      console.log('data', data);
       this.props.updateAppsStatusOverall(data.current.overall);
-      this.props.updateAppsStatusDetail(data.current.detail);
-      this.props.updateAppsStatusHistory(data.history);
+      //this.props.updateAppsStatusDetail(data.current.detail);
+      //this.props.updateAppsStatusHistory(socket);
     });
+  }
+
+  componentWillUnmount() {
+    socket.close();
   }
 
   render() {
@@ -21,7 +31,7 @@ class AppStatusOverall extends React.Component {
       <div>
         <h1>Overal Application Status</h1>
         {this.props.appsCnt === 0 ? (
-          <Spinner animation="grow" variant="secondary" />
+          <Spinner animation="grow" variant="primary" />
         ) : (
           <AppCard />
         )}
@@ -39,12 +49,15 @@ const mapDistachToProps = dispatch => {
     updateAppsStatusOverall: payload => {
       dispatch({ type: type.UPDATE_APPS_STATUS_OVERALL, payload });
     },
-    updateAppsStatusDetail: payload => {
-      dispatch({ type: type.UPDATE_APPS_STATUS_DETAIL, payload });
-    },
-    updateAppsStatusHistory: payload => {
-      dispatch({ type: type.ADD_APP_DETAILS_HISTORY, payload });
+    // updateAppsStatusDetail: payload => {
+    //   dispatch({ type: type.UPDATE_APPS_STATUS_DETAIL, payload });
+    // },
+    setSocket: payload => {
+      dispatch({ type: type.SET_SOCKET, payload });
     }
+    // updateAppsStatusHistory: payload => {
+    //   dispatch({ type: type.ADD_APP_DETAILS_HISTORY, payload });
+    // }
   };
 };
 

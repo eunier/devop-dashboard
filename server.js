@@ -25,16 +25,33 @@ app.get('/', (_, res) => {
 // });
 
 let socketCnt = 0;
+let clients = [];
+let clientsFirstOnData = [];
 let history = [];
 let initialized = false;
 let emiting = false;
 const maxHistorySeconds = 2 * 60 * 60;
 
 io.on('connect', socket => {
-  console.log(`socket connected, total ${++socketCnt}`);
+  clients.push(socket);
+  clientsFirstOnData.push(false);
+  console.log(`socket connected, total ${clients.length}`);
+
+  socket.on('req_full_history', data => {
+    console.log(data);
+    let resHistory = [];
+
+    history.forEach(elem => {
+      resHistory.push(elem[data.appIndex]);
+    });
+
+    socket.emit('res_fll_history', { appHistory: resHistory });
+  });
 
   socket.on('disconnect', () => {
-    console.log(`socket disconnected, total ${--socketCnt}`);
+    clients.splice(clients.indexOf(socket), 1);
+    clientsFirstOnData.splice(clients.indexOf(socket), 1);
+    console.log(`socket disconnected, total ${clients.length}`);
   });
 });
 
@@ -45,27 +62,26 @@ setInterval(() => {
         appStatus.generateAppStatusData(maxHistorySeconds, history.length)
           .detail
       );
-      if (history.length === 7199) {
-        debugger;
-        console.log('slkfs');
-      }
     }
 
     initialized = true;
   }
 
   current = appStatus.generateAppStatusData();
-  history.push(current);
+  history.push(current.detail);
 
   if (history.length > maxHistorySeconds) {
     history.splice(0, 1);
   }
 
-  if (socketCnt > 0) {
+  if (clients.length > 0) {
     emiting = true;
 
     io.emit('apps_status', {
-      current: current,
+      current: current
+    });
+
+    io.emit('apps_status_history', {
       history: history
     });
   } else {
@@ -76,10 +92,8 @@ setInterval(() => {
   console.log(
     `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}] - ${
       emiting ? 'emiting, ' : ''
-    }socket count: ${socketCnt}`
+    }socket count: ${clients.length}`
   );
-
-  console.log(history.length);
 }, 1000);
 
 const port = 8000;
