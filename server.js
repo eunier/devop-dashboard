@@ -38,14 +38,14 @@ io.on('connect', socket => {
   console.log(`socket connected, total ${clients.length}`);
 
   socket.on('req_full_history', data => {
-    console.log(data);
+    console.log('data', data);
     let resHistory = [];
 
     history.forEach(elem => {
       resHistory.push(elem[data.appIndex]);
     });
 
-    socket.emit('res_fll_history', { appHistory: resHistory });
+    socket.emit('res_full_history', { appHistory: resHistory });
   });
 
   socket.on('disconnect', () => {
@@ -82,7 +82,7 @@ setInterval(() => {
     });
 
     io.emit('apps_status_history', {
-      history: history
+      latestHistory: history[history.length - 1]
     });
   } else {
     emiting = false;

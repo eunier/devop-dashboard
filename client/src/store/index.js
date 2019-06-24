@@ -31,24 +31,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         appsStatusHistory: action.payload
       };
-    // case type.ADD_APP_DETAILS_HISTORY:
-    //   const socket = action.payload;
-
-    //   if (state.appsStatusHistory.length === 0) {
-    //     socket.on('apps_status_history', data => {
-    //       console.log('apps_status_history', data);
-    //     });
-    //   }
-
-    //   return {
-    //     ...state,
-    //     appsStatusHistory: action.payload
-    //   };
+    case type.UPDATE_HISTORY:
+      let newHistory;
+      // Todo: continue here
+      return { ...state, newHistory };
     case type.SET_APP_DETAILS_INDEX:
-      return {
-        ...state,
-        appDetailsIndex: action.payload
-      };
+      return { ...state, appDetailsIndex: action.payload };
     default:
       return state;
   }

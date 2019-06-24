@@ -8,29 +8,24 @@ let socket = openSocket('http://localhost:8000');
 
 class AppStatusOverall extends React.Component {
   componentWillMount() {
-    if (!socket.connected) {
-      socket.off();
-      socket.open();
-    }
-
-    this.props.setSocket(socket);
+    socket.open();
 
     socket.on('apps_status', data => {
       this.props.updateAppsStatusOverall(data.current.overall);
-      //this.props.updateAppsStatusDetail(data.current.detail);
-      //this.props.updateAppsStatusHistory(socket);
     });
   }
 
   componentWillUnmount() {
-    socket.close();
+    socket.removeAllListeners();
   }
 
   render() {
+    const appsCnt = this.props.appsCnt;
+
     return (
       <div>
         <h1>Overal Application Status</h1>
-        {this.props.appsCnt === 0 ? (
+        {appsCnt === 0 ? (
           <Spinner animation="grow" variant="primary" />
         ) : (
           <AppCard />

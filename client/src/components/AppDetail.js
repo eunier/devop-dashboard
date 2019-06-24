@@ -4,32 +4,42 @@ import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import type from '../store/type';
 import { Line } from 'react-chartjs-2';
+import openSocket from 'socket.io-client';
+let socket = openSocket('http://localhost:8000');
+const chartData = require('./lib/chart-data');
 
 class AppDetail extends Component {
-  componentDidMount() {
-    if (!this.props.socket.connected) {
-      this.props.socket.off();
-      this.props.socket.open();
-    }
+  componentWillMount() {
+    socket.open();
 
-    this.props.socket.emit('req_full_history', {
+    socket.emit('req_full_history', {
       appIndex: this.props.appDetailsIndex
     });
 
-    this.props.socket.on('res_fll_history', data => {
-      this.props.updateFullHistory(data);
+    socket.on('res_full_history', data => {
+      this.props.updateFullHistory(data.appHistory);
+    });
+
+    socket.on('apps_status_history', data => {
+      this.props.updateHistory(data.latestHistory);
     });
   }
 
+  componentWillUnmount() {
+    socket.removeAllListeners();
+  }
+
   render() {
+    const appDetailsIndex = this.props.appDetailsIndex;
+    const history = this.props.history;
+
     return (
       <div>
-        <p>{this.props.appDetailsIndex}</p>
-        {/* <p>{JSON.stringify(this.props.history)}</p> */}
-        {/* <Line /> */}
+        <h1>Applications Details</h1>
         <Link to="/">
           <Button variant="primary">Go Back</Button>
         </Link>
+        <Line data={chartData.getChartData(history)} />
       </div>
     );
   }
@@ -47,6 +57,9 @@ const mapDispatchToProps = dispatch => {
   return {
     updateFullHistory: payload => {
       dispatch({ type: type.UPDATE_FULL_HISTORY, payload });
+    },
+    updateHistory: payload => {
+      dispatch({ type: type.UPDATE_HISTORY, payload });
     }
   };
 };
