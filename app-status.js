@@ -1,6 +1,5 @@
 const generateAppStatusData = (history, maxHistorySeconds, index) => {
   const appCnt = 2;
-  const changeAmount = 1;
   let date = new Date();
 
   if (
@@ -43,7 +42,7 @@ const generateAppStatusData = (history, maxHistorySeconds, index) => {
       case status[3].minPer <= num && num <= status[3].maxPer:
         return status[3].str;
       default:
-        return Error('Wrong num');
+        return 'unknown';
     }
   };
 
@@ -51,22 +50,22 @@ const generateAppStatusData = (history, maxHistorySeconds, index) => {
   let appsStatusDetail = [];
 
   for (let i = 0; i < appCnt; i++) {
+    console.log(history);
     let statusPer = undefined;
 
     if (history.length === 0) {
-      console.log(history);
       statusPer = randomStatusNum(0, 100);
     } else {
       const directionChange = randomStatusNum(0, 1) === 1 ? 'up' : 'down';
       const lastHistPer = history[history.length - 1][i].percentage;
+      const changeAmount = randomStatusNum(0, 10);
+
       if (directionChange === 'up') {
-        console.log(history);
-        statusPer = lastHistPer + changeAmount ;
-        statusPer > 100 ? statusPer = 60 : null
-      } else {
-        console.log(history);
         statusPer = lastHistPer + changeAmount;
-        statusPer < 0 ? statusPer = 40 : null
+        statusPer > 100 ? (statusPer = statusPer - 100) : null;
+      } else {
+        statusPer = lastHistPer - changeAmount;
+        statusPer < 0 ? (statusPer = Math.abs(statusPer)) : null;
       }
     }
 
