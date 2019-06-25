@@ -1,5 +1,5 @@
 const generateAppStatusData = (history, maxHistorySeconds, index) => {
-  const appCnt = 1;
+  const appCnt = 3;
   let date = new Date();
 
   if (
@@ -62,7 +62,7 @@ const generateAppStatusData = (history, maxHistorySeconds, index) => {
 
       if (directionChange === 'up') {
         statusPer = lastHistPer + changeAmount;
-        statusPer > 100 ? (statusPer = statusPer - 100) : null;
+        statusPer > 100 ? (statusPer = Math.abs(statusPer - 100 - 100)) : null;
       } else {
         statusPer = lastHistPer - changeAmount;
         statusPer < 0 ? (statusPer = Math.abs(statusPer)) : null;
