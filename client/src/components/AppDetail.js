@@ -5,11 +5,23 @@ import { Button } from 'react-bootstrap';
 import type from '../store/type';
 import { Line } from 'react-chartjs-2';
 import openSocket from 'socket.io-client';
+import getChartData from './lib/chart-data';
 let socket = openSocket('http://localhost:8000');
-const chartData = require('./lib/chart-data');
+
+// const chartData = require('./lib/chart-data');
 
 class AppDetail extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+
+    if (window.performance) {
+      if (performance.navigation.type === 1) {
+        if (!this.props.appDetailsRequestedFromHome) {
+          this.props.setRequestUsetRedirectHome(true);
+        }
+      }
+    }
+
     socket.open();
 
     socket.emit('req_full_history', {
@@ -25,14 +37,6 @@ class AppDetail extends Component {
       console.log('res_last_history_elem', { data });
       this.props.updateHistory(data.latestHistory[this.props.appDetailsIndex]);
     });
-
-    if (window.performance) {
-      if (performance.navigation.type === 1) {
-        if (!this.props.appDetailsRequestedFromHome) {
-          this.props.setRequestUsetRedirectHome(true);
-        }
-      }
-    }
   }
 
   componentWillUnmount() {
@@ -40,7 +44,6 @@ class AppDetail extends Component {
   }
 
   render() {
-    const appDetailsIndex = this.props.appDetailsIndex;
     const history = this.props.history;
 
     return (
@@ -59,7 +62,7 @@ class AppDetail extends Component {
             <Link to="/">
               <Button variant="primary">Go Back</Button>
             </Link>
-            <Line data={chartData.getChartData(history)} />
+            <Line data={getChartData(history)} />
           </div>
         )}
       </div>

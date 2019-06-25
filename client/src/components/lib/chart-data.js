@@ -1,4 +1,4 @@
-const getChartData = history => {
+function getChartData(history) {
   let chartData = {
     labels: [],
     datasets: [
@@ -11,15 +11,17 @@ const getChartData = history => {
 
   // console.log(history);
 
-  for (let i = 0; i < history.length; i++) {
-    const elem = history[i];
-    console.log('elem', {elem});
-    // const per = elem.percentage;
-    // const date = new Date(elem.date);
-    // const dateFormated = `${date.getHour()}:${date.getSecond()}`;
-    // console.log(dateFormated);
-    // console.log(elem);
-  }
-};
+  history.forEach(elem => {
+    const data = { ...elem };
+    const per = data.percentage;
+    const dateStr = data.date;
+    const date = new Date(dateStr);
 
-module.exports = { getChartData: getChartData };
+    chartData.labels.push(`${date.getHours()}:${date.getMinutes()}`);
+    chartData.datasets[0].data.push(per);
+  });
+
+  return chartData;
+}
+
+export default getChartData;
