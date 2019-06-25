@@ -7,7 +7,8 @@ import openSocket from 'socket.io-client';
 let socket = openSocket('http://localhost:8000');
 
 class AppStatusOverall extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
+    this.props.setDetailsRequestFlag(false);
     socket.open();
 
     socket.on('apps_status', data => {
@@ -46,6 +47,9 @@ const mapDistachToProps = dispatch => {
     },
     setSocket: payload => {
       dispatch({ type: type.SET_SOCKET, payload });
+    },
+    setDetailsRequestFlag: payload => {
+      dispatch({type: type.SET_DETAILS_REQUEST_FLAG, payload})
     }
   };
 };

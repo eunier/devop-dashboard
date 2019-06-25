@@ -1,5 +1,5 @@
 const generateAppStatusData = (history, maxHistorySeconds, index) => {
-  const appCnt = 2;
+  const appCnt = 20;
   let date = new Date();
 
   if (

@@ -20,6 +20,7 @@ class AppCard extends React.Component {
                   onClick={() => {
                     console.log(`click ${key}`);
                     this.props.setAppDetailsIndex(key);
+                    this.props.setDetailsRequestFlag(true);
                   }}
                 >
                   <Card.Title>{app.name}</Card.Title>
@@ -55,6 +56,9 @@ const mapDispatchToProps = dispatch => {
   return {
     setAppDetailsIndex: payload => {
       dispatch({ type: type.SET_APP_DETAILS_INDEX, payload });
+    },
+    setDetailsRequestFlag: payload => {
+      dispatch({ type: type.SET_DETAILS_REQUEST_FLAG, payload });
     }
   };
 };

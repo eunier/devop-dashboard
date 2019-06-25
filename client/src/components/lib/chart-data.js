@@ -13,6 +13,7 @@ const getChartData = history => {
 
   for (let i = 0; i < history.length; i++) {
     const elem = history[i];
+    console.log('elem', {elem});
     // const per = elem.percentage;
     // const date = new Date(elem.date);
     // const dateFormated = `${date.getHour()}:${date.getSecond()}`;

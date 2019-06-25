@@ -25,6 +25,14 @@ class AppDetail extends Component {
       console.log('res_last_history_elem', { data });
       this.props.updateHistory(data.latestHistory[this.props.appDetailsIndex]);
     });
+
+    if (window.performance) {
+      if (performance.navigation.type === 1) {
+        if (!this.props.appDetailsRequestedFromHome) {
+          this.props.setRequestUsetRedirectHome(true);
+        }
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -37,11 +45,23 @@ class AppDetail extends Component {
 
     return (
       <div>
-        <h1>Applications Details</h1>
-        <Link to="/">
-          <Button variant="primary">Go Back</Button>
-        </Link>
-        <Line data={chartData.getChartData(history)} />
+        {this.props.appDetailsRequestedFromHome === false ? (
+          <div>
+            <Link to="/">
+              <Button variant="danger">
+                {'Page reloaded, please click here go back'}
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <h1>Applications Details</h1>
+            <Link to="/">
+              <Button variant="primary">Go Back</Button>
+            </Link>
+            <Line data={chartData.getChartData(history)} />
+          </div>
+        )}
       </div>
     );
   }
@@ -51,7 +71,8 @@ const mapStateToProps = state => {
   return {
     appDetailsIndex: state.appDetailsIndex,
     socket: state.socket,
-    history: state.appsStatusHistory
+    history: state.appsStatusHistory,
+    appDetailsRequestedFromHome: state.appDetailsRequestedFromHome
   };
 };
 
@@ -62,6 +83,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateHistory: payload => {
       dispatch({ type: type.UPDATE_HISTORY, payload });
+    },
+    setRequestUsetRedirectHome: payload => {
+      dispatch({ type: type.SET_REQUEST_USER_REDIRECT_HOME, payload });
     }
   };
 };

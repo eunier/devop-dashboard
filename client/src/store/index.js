@@ -2,6 +2,8 @@ import { createStore } from 'redux';
 import type from './type';
 
 const initialState = {
+  appDetailsRequestedFromHome: false,
+  requestUserRedirectHomeFlag: false,
   appDetailsIndex: null,
   appsStatusOverall: [],
   appsStatusDetail: [],
@@ -38,6 +40,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, appsStatusHistory: newHistory };
     case type.SET_APP_DETAILS_INDEX:
       return { ...state, appDetailsIndex: action.payload };
+    case type.SET_DETAILS_REQUEST_FLAG:
+      return { ...state, appDetailsRequestedFromHome: action.payload };
+    case type.SET_REQUEST_USER_REDIRECT_HOME:
+      return { ...state, requestUserRedirectHomeFlag: action.payload };
     default:
       return state;
   }
