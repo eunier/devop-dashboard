@@ -31,7 +31,7 @@ let history = [];
 let initialized = false;
 let emiting = false;
 // const maxHistorySeconds = 2 * 60 * 60;
-const maxHistorySeconds = 4;
+const maxHistorySeconds = 3;
 
 io.on('connect', socket => {
   clients.push(socket);
@@ -65,7 +65,7 @@ setInterval(() => {
   if (initialized === false) {
     while (history.length < maxHistorySeconds - 1) {
       history.push(
-        appStatus.generateAppStatusData(maxHistorySeconds, history.length)
+        appStatus.generateAppStatusData(history, maxHistorySeconds, history.length, )
           .detail
       );
     }
@@ -73,7 +73,7 @@ setInterval(() => {
     initialized = true;
   }
 
-  current = appStatus.generateAppStatusData();
+  current = appStatus.generateAppStatusData(history);
   history.push(current.detail);
 
   if (history.length > maxHistorySeconds) {

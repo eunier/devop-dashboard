@@ -1,4 +1,6 @@
-const generateAppStatusData = (maxHistorySeconds, index) => {
+const generateAppStatusData = (history, maxHistorySeconds, index) => {
+  const appCnt = 2;
+  const changeAmount = 1;
   let date = new Date();
 
   if (
@@ -10,7 +12,6 @@ const generateAppStatusData = (maxHistorySeconds, index) => {
     date = new Date(date - durationInSecond * MS_PER_SECOND);
   }
 
-  const appCnt = 2;
   const status = {
     1: {
       str: 'Critical',
@@ -33,25 +34,57 @@ const generateAppStatusData = (maxHistorySeconds, index) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
+  const getStatusStr = num => {
+    switch (true) {
+      case status[1].minPer <= num && num <= status[1].maxPer:
+        return status[1].str;
+      case status[2].minPer <= num && num <= status[2].maxPer:
+        return status[2].str;
+      case status[3].minPer <= num && num <= status[3].maxPer:
+        return status[3].str;
+      default:
+        return Error('Wrong num');
+    }
+  };
+
   let appsStatusOverall = [];
   let appsStatusDetail = [];
 
   for (let i = 0; i < appCnt; i++) {
-    const statusNum = randomStatusNum(1, 3);
-    const statusPer = randomStatusNum(
-      status[statusNum].minPer,
-      status[statusNum].maxPer
-    );
+    let statusPer = undefined;
+
+    if (history.length === 0) {
+      console.log(history);
+      statusPer = randomStatusNum(0, 100);
+    } else {
+      const directionChange = randomStatusNum(0, 1) === 1 ? 'up' : 'down';
+      const lastHistPer = history[history.length - 1][i].percentage;
+      if (directionChange === 'up') {
+        console.log(history);
+        statusPer = lastHistPer + changeAmount ;
+        statusPer > 100 ? statusPer = 60 : null
+      } else {
+        console.log(history);
+        statusPer = lastHistPer + changeAmount;
+        statusPer < 0 ? statusPer = 40 : null
+      }
+    }
+
+    const statusStr = getStatusStr(statusPer);
+    // console.log(history);
+    // const statusNum = randomStatusNum(1, 3);
+    // const statusPer = randomStatusNum(
+    //   status[statusNum].minPer,
+    //   status[statusNum].maxPer
+    // );
     const name = `App${i + 1}`;
 
-    appsStatusOverall.push({ name: name, status: status[statusNum].str });
+    appsStatusOverall.push({ name: name, status: statusStr });
     appsStatusDetail.push({ name: name, percentage: statusPer, date: date });
   }
 
   return { overall: appsStatusOverall, detail: appsStatusDetail };
 };
-
-generateAppStatusData();
 
 module.exports = {
   generateAppStatusData: generateAppStatusData
