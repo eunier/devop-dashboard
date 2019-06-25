@@ -62,7 +62,29 @@ class AppDetail extends Component {
             <Link to="/">
               <Button variant="primary">Go Back</Button>
             </Link>
-            <Line data={getChartData(history)} />
+            <Line
+              data={getChartData(history)}
+              options={{
+                layout: {
+                  padding: {
+                    left: 30,
+                    right: 30,
+                    top: 0
+                  }
+                },
+                elements: {
+                  line: {
+                    tension: 0 // disables bezier curves
+                  }
+                },
+                animation: {
+                  duration: 0
+                },
+                hove: {
+                  animationDuration: 0
+                }
+              }}
+            />
           </div>
         )}
       </div>

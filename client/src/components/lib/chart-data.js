@@ -4,12 +4,12 @@ function getChartData(history) {
     datasets: [
       {
         label: 'test',
-        data: []
+        data: [],
+        radius: 0,
+        fill: false
       }
     ]
   };
-
-  // console.log(history);
 
   history.forEach(elem => {
     const data = { ...elem };
