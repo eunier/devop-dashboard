@@ -31,7 +31,7 @@ let history = [];
 let initialized = false;
 let emiting = false;
 // const maxHistorySeconds = 2 * 60 * 60;
-const maxHistorySeconds = 1000;
+const maxHistorySeconds = 3600 / 2;
 
 io.on('connect', socket => {
   clients.push(socket);
