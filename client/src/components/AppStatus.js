@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppCard from './AppCard';
 import type from '../store/type';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Alert } from 'react-bootstrap';
 import openSocket from 'socket.io-client';
 let socket = openSocket('http://localhost:8000');
 
 class AppStatusOverall extends React.Component {
-  componentDidMount() {
-    this.props.setDetailsRequestFlag(false);
-    socket.open();
+  componentWillMount() {
+    if (this.props.appDetailsRequestedFromHome === true) {
+      this.props.setDetailsRequestFlag(false);
+    }
 
     socket.on('apps_status', data => {
       this.props.updateAppsStatusOverall(data.current.overall);
@@ -25,6 +26,9 @@ class AppStatusOverall extends React.Component {
 
     return (
       <div>
+        {this.props.requestUserRedirectHomeFlag === true ? (
+          <Alert variant="danger">Please realod page</Alert>
+        ) : null}
         <h1>Overal Application Status</h1>
         {appsCnt === 0 ? (
           <Spinner animation="grow" variant="primary" />
@@ -37,7 +41,12 @@ class AppStatusOverall extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { appsCnt: state.appsStatusOverall.length };
+  return {
+    appsCnt: state.appsStatusOverall.length,
+    appDetailsRequestedFromHome: state.appDetailsRequestedFromHome,
+    requestUserRedirectHomeFlag: state.requestUserRedirectHomeFlag,
+    appDetailsIndex: state.appDetailsIndex
+  };
 };
 
 const mapDistachToProps = dispatch => {
@@ -49,7 +58,10 @@ const mapDistachToProps = dispatch => {
       dispatch({ type: type.SET_SOCKET, payload });
     },
     setDetailsRequestFlag: payload => {
-      dispatch({type: type.SET_DETAILS_REQUEST_FLAG, payload})
+      dispatch({ type: type.SET_DETAILS_REQUEST_FLAG, payload });
+    },
+    updateFullHistory: payload => {
+      dispatch({ type: type.UPDATE_FULL_HISTORY, payload });
     }
   };
 };

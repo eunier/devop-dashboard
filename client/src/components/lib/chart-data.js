@@ -3,18 +3,21 @@ function getChartData(history) {
     labels: [],
     datasets: [
       {
-        label: 'test',
+        label: 'Memory/CPU',
         data: [],
         radius: 0,
-        fill: false
+        fill: false,
+        borderColor: '#ff0000',
+        backgroundColor: [
+          'pink'
+        ]
       }
     ]
   };
 
   history.forEach(elem => {
-    const data = { ...elem };
-    const per = data.percentage;
-    const dateStr = data.date;
+    const per = elem.percentage;
+    const dateStr = elem.date;
     const date = new Date(dateStr);
 
     chartData.labels.push(`${date.getHours()}:${date.getMinutes()}`);

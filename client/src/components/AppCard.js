@@ -18,7 +18,6 @@ class AppCard extends React.Component {
                   text="white"
                   className="text-left p-3"
                   onClick={() => {
-                    console.log(`click ${key}`);
                     this.props.setAppDetailsIndex(key);
                     this.props.setDetailsRequestFlag(true);
                   }}

@@ -8,38 +8,21 @@ app.get('/', (_, res) => {
   res.send('<h1>test</>');
 });
 
-// let emitCnt = 0;
-
-// io.on('connection', socket => {
-//   console.log('socket connected');
-
-//   const loop = setInterval(() => {
-//     console.log(++emitCnt);
-//     socket.emit('data', appStatus.generateAppStatusData());
-//   }, 1000);
-
-//   socket.on('disconnect', () => {
-//     clearInterval(loop);
-//     console.log('socket disconnected');
-//   });
-// });
-
 let socketCnt = 0;
 let clients = [];
 let clientsFirstOnData = [];
 let history = [];
 let initialized = false;
 let emiting = false;
-// const maxHistorySeconds = 2 * 60 * 60;
-const maxHistorySeconds = 3600 / 2;
+const maxHistorySeconds = 60 * 30;
 
 io.on('connect', socket => {
   clients.push(socket);
   clientsFirstOnData.push(false);
+
   console.log(`socket connected, total ${clients.length}`);
 
   socket.on('req_full_history', data => {
-    console.log('data', data);
     let resHistory = [];
 
     history.forEach(elem => {
@@ -51,7 +34,6 @@ io.on('connect', socket => {
 
   socket.on('req_last_history_elem', data => {
     appFocusIndex = data.appIndex;
-    console.log(appFocusIndex);
   });
 
   socket.on('disconnect', () => {
@@ -65,8 +47,11 @@ setInterval(() => {
   if (initialized === false) {
     while (history.length < maxHistorySeconds - 1) {
       history.push(
-        appStatus.generateAppStatusData(history, maxHistorySeconds, history.length, )
-          .detail
+        appStatus.generateAppStatusData(
+          history,
+          maxHistorySeconds,
+          history.length
+        ).detail
       );
     }
 
@@ -97,8 +82,8 @@ setInterval(() => {
   const date = new Date();
   console.log(
     `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}] - ${
-      emiting ? 'emiting, ' : ''
-    }socket count: ${clients.length}`
+      emiting ? 'emiting' : 'no socket connected'
+    }`
   );
 }, 1000);
 

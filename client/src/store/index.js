@@ -8,25 +8,14 @@ const initialState = {
   appsStatusOverall: [],
   appsStatusDetail: [],
   appsStatusHistory: [],
-  socket: null
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case type.SET_SOCKET:
-      return {
-        ...state,
-        socket: action.payload
-      };
     case type.UPDATE_APPS_STATUS_OVERALL:
       return {
         ...state,
         appsStatusOverall: action.payload
-      };
-    case type.UPDATE_APPS_STATUS_DETAIL:
-      return {
-        ...state,
-        appsStatusDetail: action.payload
       };
     case type.UPDATE_FULL_HISTORY:
       return {
