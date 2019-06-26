@@ -4,11 +4,6 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const appStatus = require('./app-status');
 
-app.get('/', (_, res) => {
-  res.send('<h1>test</>');
-});
-
-let socketCnt = 0;
 let clients = [];
 let clientsFirstOnData = [];
 let history = [];
