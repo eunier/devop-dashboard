@@ -5,7 +5,6 @@ const io = require('socket.io')(http);
 const appStatus = require('./app-status');
 
 let clients = [];
-let clientsFirstOnData = [];
 let history = [];
 let initialized = false;
 let emiting = false;
@@ -13,8 +12,6 @@ const maxHistorySeconds = 60 * 30;
 
 io.on('connect', socket => {
   clients.push(socket);
-  clientsFirstOnData.push(false);
-
   console.log(`socket connected, total ${clients.length}`);
 
   socket.on('req_full_history', data => {
@@ -33,7 +30,6 @@ io.on('connect', socket => {
 
   socket.on('disconnect', () => {
     clients.splice(clients.indexOf(socket), 1);
-    clientsFirstOnData.splice(clients.indexOf(socket), 1);
     console.log(`socket disconnected, total ${clients.length}`);
   });
 });
@@ -77,7 +73,7 @@ setInterval(() => {
   const date = new Date();
   console.log(
     `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}] - ${
-      emiting ? 'emiting' : 'no socket connected'
+      emiting ? `emiting, socket count: ${clients.length}` : 'no socket connected'
     }`
   );
 }, 1000);

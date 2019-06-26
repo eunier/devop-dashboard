@@ -7,7 +7,7 @@ import type from '../store/type';
 import { Line } from 'react-chartjs-2';
 import openSocket from 'socket.io-client';
 import getChartData from './lib/chart-data';
-let socket = openSocket('http://localhost:8000');
+let socket;
 
 class AppDetail extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class AppDetail extends Component {
   }
 
   componentWillMount() {
-    socket.open();
+    socket = openSocket('http://localhost:8000');
 
     socket.emit('req_full_history', {
       appIndex: this.props.appDetailsIndex
@@ -39,7 +39,7 @@ class AppDetail extends Component {
   }
 
   componentWillUnmount() {
-    socket.removeAllListeners();
+    socket.close();
   }
 
   render() {

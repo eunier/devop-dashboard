@@ -4,10 +4,12 @@ import AppCard from './AppCard';
 import type from '../store/type';
 import { Spinner, Alert } from 'react-bootstrap';
 import openSocket from 'socket.io-client';
-let socket = openSocket('http://localhost:8000');
+let socket;
 
 class AppStatusOverall extends React.Component {
   componentWillMount() {
+    socket = openSocket('http://localhost:8000');
+
     if (this.props.appDetailsRequestedFromHome === true) {
       this.props.setDetailsRequestFlag(false);
     }
@@ -18,7 +20,7 @@ class AppStatusOverall extends React.Component {
   }
 
   componentWillUnmount() {
-    socket.removeAllListeners();
+    socket.close();
   }
 
   render() {
