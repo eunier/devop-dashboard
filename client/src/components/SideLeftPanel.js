@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'react-bootstrap';
-import sec from './utils/sec';
+import timeStr from './utils/sec';
 
 class SideLeftPanel extends Component {
   render() {
@@ -14,8 +14,8 @@ class SideLeftPanel extends Component {
 
     const currentData = [
       this.props.incidents,
-      sec.timeStr(this.props.impactedSeconds),
-      sec.timeStr(this.props.mttaCount),
+      timeStr(this.props.impactedSeconds),
+      timeStr(this.props.mttaCount),
       this.props.anomalistFeatures
     ];
 

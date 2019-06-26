@@ -7,4 +7,4 @@ const timeStr = sec => {
   return hours > 0 ? `${hours} hr ${remainMin} min` : `${remainMin} min`;
 };
 
-module.exports = { timeStr: timeStr };
+export default timeStr;

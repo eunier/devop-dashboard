@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { CardColumns, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import type from '../store/type';
+import color from './utils/color';
 
 class AppCard extends React.Component {
   render() {
@@ -14,7 +15,7 @@ class AppCard extends React.Component {
               <Link key={key} to="/detail">
                 <Card
                   key={key}
-                  bg={getColor(app.status)}
+                  bg={color(app.status)}
                   text="white"
                   className="text-left p-3"
                   onClick={() => {
@@ -33,19 +34,6 @@ class AppCard extends React.Component {
     );
   }
 }
-
-const getColor = status => {
-  switch (status) {
-    case 'Ok':
-      return 'success';
-    case 'Major':
-      return 'warning';
-    case 'Critical':
-      return 'danger';
-    default:
-      return 'secondary';
-  }
-};
 
 const mapStateToProps = state => {
   return { appsStatusOverall: state.appsStatusOverall };
