@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import SideLeftPanel from './SideLeftPanel';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, DropdownButton, Dropdown } from 'react-bootstrap';
 import type from '../store/type';
 import { Line } from 'react-chartjs-2';
 import openSocket from 'socket.io-client';
 import getChartData from './lib/chart-data';
+import time from './utils/time';
 let socket;
 
 class AppDetail extends Component {
@@ -36,6 +37,10 @@ class AppDetail extends Component {
     socket.on('res_last_history_elem', data => {
       this.props.updateHistory(data.latestHistory[this.props.appDetailsIndex]);
     });
+
+    if (this.props.chartRange < time.MIN_30) {
+      this.props.setChartRange(time.MIN_30);
+    }
   }
 
   componentWillUnmount() {
@@ -43,6 +48,14 @@ class AppDetail extends Component {
   }
 
   render() {
+    const timeOptions = [
+      time.MIN_30,
+      time.MIN_20,
+      time.MIN_10,
+      time.MIN_5,
+      time.MIN_1
+    ];
+
     if (this.props.history.length === 0) {
       return null;
     } else {
@@ -61,10 +74,6 @@ class AppDetail extends Component {
           ) : (
             <div>
               <h1>Applications Detail</h1>
-              {}
-              <Link to="/">
-                <Button variant="primary">Go Back</Button>
-              </Link>
               <Card bg="dark">
                 <div className="container">
                   <div className="row">
@@ -79,7 +88,10 @@ class AppDetail extends Component {
                       style={{ alignSelf: 'right' }}
                     >
                       <Line
-                        data={getChartData(this.props.history)}
+                        data={getChartData(
+                          this.props.history,
+                          this.props.chartRange
+                        )}
                         options={{
                           layout: {
                             padding: {
@@ -123,6 +135,8 @@ class AppDetail extends Component {
                             yAxes: [
                               {
                                 ticks: {
+                                  beginAtZero: true,
+                                  max: 100,
                                   fontSize: 15,
                                   fontColor: '#fff'
                                 },
@@ -138,6 +152,36 @@ class AppDetail extends Component {
                   </div>
                 </div>
               </Card>
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-6 text-right">
+                    <Link to="/">
+                      <Button variant="primary">
+                        <i className="fa fa-arrow-left" /> Go Back
+                      </Button>
+                    </Link>
+                  </div>
+                  <div className="col-md-6 text-left">
+                    <DropdownButton
+                      id="dropdown-basic-button"
+                      title="Select chart range"
+                    >
+                      {timeOptions.map((time, i) => {
+                        return (
+                          <Dropdown.Item
+                            key={i}
+                            onClick={() => {
+                              this.props.setChartRange(time);
+                            }}
+                          >
+                            {`${time / 60} min`}
+                          </Dropdown.Item>
+                        );
+                      })}
+                    </DropdownButton>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -151,6 +195,7 @@ const mapStateToProps = state => {
     socket: state.socket,
     appDetailsIndex: state.appDetailsIndex,
     history: state.appsStatusHistory,
+    chartRange: state.chartRange,
     appDetailsRequestedFromHome: state.appDetailsRequestedFromHome
   };
 };
@@ -165,6 +210,9 @@ const mapDispatchToProps = dispatch => {
     },
     setRequestUsetRedirectHome: payload => {
       dispatch({ type: type.SET_REQUEST_USER_REDIRECT_HOME, payload });
+    },
+    setChartRange: payload => {
+      dispatch({ type: type.SET_CHART_RANGE, payload });
     }
   };
 };

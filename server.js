@@ -73,7 +73,9 @@ setInterval(() => {
   const date = new Date();
   console.log(
     `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}] - ${
-      emiting ? `emiting, socket count: ${clients.length}` : 'no socket connected'
+      emiting
+        ? `emiting, socket count: ${clients.length}`
+        : 'no socket connected'
     }`
   );
 }, 1000);

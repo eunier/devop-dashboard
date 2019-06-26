@@ -1,13 +1,14 @@
 import { createStore } from 'redux';
 import type from './type';
+import time from '../components/utils/time';
 
 const initialState = {
   appDetailsRequestedFromHome: false,
   requestUserRedirectHomeFlag: false,
   appDetailsIndex: null,
   appsStatusOverall: [],
-  appsStatusDetail: [],
   appsStatusHistory: [],
+  chartRange: time.MIN_30
 };
 
 const reducer = (state = initialState, action) => {
@@ -33,6 +34,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, appDetailsRequestedFromHome: action.payload };
     case type.SET_REQUEST_USER_REDIRECT_HOME:
       return { ...state, requestUserRedirectHomeFlag: action.payload };
+    case type.SET_CHART_RANGE:
+      return { ...state, chartRange: action.payload };
     default:
       return state;
   }

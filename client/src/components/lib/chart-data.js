@@ -1,4 +1,4 @@
-function getChartData(history) {
+function getChartData(history, chartRange) {
   let chartData = {
     labels: [],
     datasets: [
@@ -8,21 +8,31 @@ function getChartData(history) {
         radius: 0,
         fill: false,
         borderColor: '#ff0000',
-        backgroundColor: [
-          'pink'
-        ]
+        backgroundColor: ['red']
       }
     ]
   };
 
-  history.forEach(elem => {
+  const startIndex = history.length - chartRange;
+
+  for (let i = startIndex; i < history.length; i++) {
+    const elem = history[i];
     const per = elem.percentage;
     const dateStr = elem.date;
     const date = new Date(dateStr);
 
     chartData.labels.push(`${date.getHours()}:${date.getMinutes()}`);
     chartData.datasets[0].data.push(per);
-  });
+  }
+
+  // history.forEach(elem => {
+  //   const per = elem.percentage;
+  //   const dateStr = elem.date;
+  //   const date = new Date(dateStr);
+
+  //   chartData.labels.push(`${date.getHours()}:${date.getMinutes()}`);
+  //   chartData.datasets[0].data.push(per);
+  // });
 
   return chartData;
 }
