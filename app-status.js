@@ -78,8 +78,8 @@ const generateAppStatusData = (history, maxHistorySeconds, index) => {
         ? (incidentsCnt = lastIncidentsCnt + 1)
         : (incidentsCnt = lastIncidentsCnt);
 
-      // 40 % of impact second
-      randomNum(0, 99) < 40
+      // 60 % of impact second
+      randomNum(0, 99) < 60
         ? (impactedSec = lastImpactedSec + 1)
         : (impactedSec = lastImpactedSec);
 
