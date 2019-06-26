@@ -1,7 +1,7 @@
 # devop-dashboard
 React.js and Socket.io full stack app
 
-![](https://github.com/eunier14/devop-dashboard/blob/master/media/devop-dashboard.gif)
+![](https://github.com/eunier14/devop-dashboard/blob/master/media/devop-dashboard-demo.gif)
 
 ## Requirement
 [Node.js and NPM](https://nodejs.org/en/)
