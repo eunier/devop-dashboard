@@ -7,7 +7,7 @@ React.js and Socket.io full stack app
 [Node.js and NPM](https://nodejs.org/en/)
 
 ## Usage
-Within the project root directory using Linux or Mac terminal:
+Within the project root directory:
 ```javascript
 npm install
 ```
